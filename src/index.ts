@@ -1,11 +1,9 @@
-import {Command, Option} from "commander";
+import { Command, Option } from "commander";
 import readline from "node:readline/promises";
-import {stdin as input, stdout as output} from "node:process";
-import fs from "node:fs";
+import { stdin as input, stdout as output } from "node:process";
 import * as nodemailer from "nodemailer";
-import os from "node:os";
-import path from "node:path";
-
+import type { GoogleAppPasswordConfig } from "./types.ts";
+import { Config } from "./config.ts";
 
 function main() {
   const program = new Command();
@@ -17,14 +15,32 @@ function main() {
 
   program.command("send")
     .description("Send an email")
-    .option("-s, --subject <str>", "Subject of email")
-    .option("-m, --message <str>", "Message of email. Can be HTML")
-    .option("-r, --recipients <str>", "A space separated string of email recipients")
+    .requiredOption("-s, --subject <str>", "Subject of email")
+    .requiredOption("-m, --message <str>", "Message of email. Can be HTML")
+    .requiredOption("-r, --recipients <str>", "A space separated string of email recipients")
     .option("-f, --from <str>", "Optional send from name")
-    .action(function (options) {
-      if (!options["subject"] || !options["message"] || !options["recipients"] || !options["from"]) {
-        console.log("Must include subject, message, recipients and from. Use --help for more info");
-        return;
+    .action(async function (options) {
+      const config = Config.getConfig();
+      if (!config) return;
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: config.emailAddress,
+          pass: config.appPassword,
+        }
+      });
+
+      try {
+        const info = await transporter.sendMail({
+          from: options.from ? `"${options.from}" <${config.emailAddress}>` : config.emailAddress,
+          to: options.recipients,
+          subject: options.subject,
+          html: options.message,
+        });
+        console.log("Message sent: ", info.messageId);
+      } catch (e) {
+        console.error("Error while sending mail:", e);
       }
     });
 
@@ -46,20 +62,11 @@ function main() {
 main();
 
 async function handleConfig(options: Record<string, string>) {
-  const configDir = ".email-cli";
-  const homeDir = os.homedir();
-  const dirPath = path.join(homeDir, configDir);
-  const filePath = path.join(dirPath, "config.json");
-
   if (options.viewConfig) {
-    if (!fs.existsSync(filePath)) {
-      console.log("No configuration file exists yet. Create a new one with `email-cli` config");
-      return;
-    }
-    const data = fs.readFileSync(filePath, {encoding: "utf-8"});
-    const decodeJson = JSON.parse(data);
-    for (const line in decodeJson) {
-      console.log(`${line}: ${decodeJson[line]}`);
+    const configData = Config.getConfig();
+    if (!configData) return;
+    for (const line in configData) {
+      console.log(`${line}: ${configData[line as keyof GoogleAppPasswordConfig]}`);
     }
     return;
   }
@@ -72,24 +79,9 @@ async function handleConfig(options: Record<string, string>) {
 
   try {
     const emailAddress = await rl.question("Enter email address: ");
-    const port = await rl.question("Enter port: ");
     const appPassword = await rl.question("Enter app-password: ");
 
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, {recursive: true});
-    }
-
-    fs.writeFileSync(filePath,
-      JSON.stringify({
-          emailAddress,
-          port,
-          appPassword,
-        },
-        null,
-        2,
-      ));
-
-    console.log("Saved configuration to ~/.email-cli");
+    Config.updateConfig({emailAddress, appPassword});
   } catch (e: any) {
     if (e.name === "AbortError") {
       console.log("Exit");
