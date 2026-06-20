@@ -20,7 +20,7 @@ export class Config {
 
   static updateConfig(config: GoogleAppPasswordConfig) {
     if (!fs.existsSync(this.dirPath)) {
-      fs.mkdirSync(this.filePath, {recursive: true});
+      fs.mkdirSync(this.dirPath, {recursive: true});
     }
 
     fs.writeFileSync(this.filePath,
