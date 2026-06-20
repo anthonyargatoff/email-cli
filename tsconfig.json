@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
     "target": "es2016",
-    "module": "commonjs",
+    "module": "CommonJS",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist"
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

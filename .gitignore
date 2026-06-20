@@ -9,3 +9,8 @@ yarn-error.log*
 .pnp.js
 
 .vscode/*
+
+dist/*
+
+email-cli
+sea-prep.blob

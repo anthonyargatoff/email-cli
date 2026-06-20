@@ -2,8 +2,8 @@ import { Command, Option } from "commander";
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import * as nodemailer from "nodemailer";
-import type { GoogleAppPasswordConfig } from "./types.ts";
-import { Config } from "./config.ts";
+import type { GoogleAppPasswordConfig } from "./types.js";
+import { Config } from "./config.js";
 
 function main() {
   const program = new Command();

@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import type { GoogleAppPasswordConfig } from "./types.ts";
+import type { GoogleAppPasswordConfig } from "./types.js";
 import fs from "node:fs";
 
 export class Config {
