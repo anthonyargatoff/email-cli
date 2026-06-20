@@ -1,0 +1,20 @@
+{
+  "name": "email-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "nodemailer": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.0",
+    "@types/nodemailer": "^8.0.1",
+    "typescript": "^5.5.3"
+  },
+  "private": true
+}
