@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "bundle": "esbuild src/index.ts --bundle --platform=node --outfile=dist/bundle.js",
-    "buildExecutable": "pnpm run bundle && node --experimental-sea-config sea-config.json && cp $(command -v node) email-cli && pnpx postject email-cli NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 && rimraf sea-prep.blob",
+    "buildLinuxX86": "pnpm run bundle && node --experimental-sea-config sea-config.json && cp $(command -v node) build/linux/email-cli && pnpx postject build/linux/email-cli NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 && rimraf sea-prep.blob",
+    "buildLinuxArm64": "pnpm run bundle && node --experimental-sea-config sea-config.json && cp node_versions/node-v24.17.0-linux-arm64/bin/node build/linux-arm64/email-cli && pnpx postject build/linux-arm64/email-cli NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 && rimraf sea-prep.blob",
     "dev": "tsx src/index.ts"
   },
   "dependencies": {
