@@ -6,8 +6,9 @@
   "scripts": {
     "build": "tsc",
     "bundle": "esbuild src/index.ts --bundle --platform=node --outfile=dist/bundle.js",
-    "buildLinuxX86": "pnpm run bundle && node --experimental-sea-config sea-config.json && cp $(command -v node) build/linux/email-cli && pnpx postject build/linux/email-cli NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 && rimraf sea-prep.blob",
-    "buildLinuxArm64": "pnpm run bundle && node --experimental-sea-config sea-config.json && cp node_versions/node-v24.17.0-linux-arm64/bin/node build/linux-arm64/email-cli && pnpx postject build/linux-arm64/email-cli NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 && rimraf sea-prep.blob",
+    "buildLinuxX86": "pnpm run bundle && node --experimental-sea-config sea-config.json && cp $(command -v node) build/email-cli-linux-x86 && pnpx postject build/email-cli-linux-x86 NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 && rimraf sea-prep.blob",
+    "buildLinuxArm64": "pnpm run bundle && node --experimental-sea-config sea-config.json && cp node_versions/node-v24.17.0-linux-arm64/bin/node build/email-cli-linux-arm64 && pnpx postject build/email-cli-linux-arm64 NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 && rimraf sea-prep.blob",
+    "buildAll": "pnpm run buildLinuxX86 && pnpm run buildLinuxArm64",
     "dev": "tsx src/index.ts"
   },
   "dependencies": {

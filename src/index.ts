@@ -34,7 +34,7 @@ function main() {
       try {
         const info = await transporter.sendMail({
           from: options.from ? `"${options.from}" <${config.emailAddress}>` : config.emailAddress,
-          to: options.recipients,
+          bcc: options.recipients.replaceAll(" ", ", "),
           subject: options.subject,
           html: options.message,
         });
