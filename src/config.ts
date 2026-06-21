@@ -11,7 +11,7 @@ export class Config {
 
   static getConfig(): GoogleAppPasswordConfig | null {
     if (!fs.existsSync(this.filePath)) {
-      console.log("No configuration file exists yet. Create a new one with `email-cli` config");
+      console.log("No configuration file exists yet. Create a new one with 'email-cli config'");
       return null;
     }
     const data = fs.readFileSync(this.filePath, {encoding: "utf-8"});
